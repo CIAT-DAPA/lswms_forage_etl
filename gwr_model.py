@@ -8,6 +8,7 @@ import matplotlib as mpl
 import pandas as pd
 import json
 import os
+import funcs
 
 # Constants
 filepath = os.path.join(os.getcwd(), "data.json")
@@ -21,6 +22,10 @@ outputs_path = os.path.join(all_path, "outputs")
 
 combined_output=os.path.join(outputs_path,  "combined.csv")
 results_output=os.path.join(outputs_path,  "results.csv")
+
+if funcs.check_size(combined_output):
+    funcs.truncate_file(results_output)
+    funcs.exit_program()
 
 data = pd.read_csv(combined_output)
 data['ndvi'] = data['ndvi'] * 0.0001

@@ -22,9 +22,16 @@ workspace_name = "waterpoints_et"
 forecast_type = "biomass"
 country_iso = workspace_name.split("_")[1]
 folder_data = os.path.join(all_path, "data")
+outputs_path = os.path.join(all_path, "outputs")
 folder_layers = os.path.join(folder_data, "layers")
 folder_properties = os.path.join(folder_layers, forecast_type+"_properties")
 folder_tmp = os.path.join(folder_data, "tmp")
+fname = os.path.join(outputs_path, "new_data_list_FINAL.txt")
+
+with open(fname) as f:
+    file_content = f.readlines()
+
+rasters_files = [x.strip() for x in file_content]
 
 
 
@@ -40,7 +47,7 @@ for current_store in stores_biomass:
 
     current_layer = forecast_type+"_et"
     current_rasters_folder = os.path.join(folder_layers, current_layer)
-    rasters_files = os.listdir(current_rasters_folder)
+    #rasters_files = os.listdir(current_rasters_folder)
 
     store_name = current_store
     print("Importing")

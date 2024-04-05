@@ -5,6 +5,7 @@ import numpy as np
 import pandas as pd
 import datetime
 from datetime import date,timedelta
+import funcs
 
 
 
@@ -156,25 +157,34 @@ def generateVariables(variable,path):
 
 def mergeDataframes(df1,df2):
   return pd.merge(df1, df2, on=['X', 'Y', 'date'], how='inner')
-
+  
 
 if ndvi.size().getInfo()>0:
   ndvi1 = ndvi.filterBounds(ee_fc).map(addDate).map(rasterExtraction).flatten()
   ndvi2=generateVariables(ndvi1,ndvi_output);
-  if preci16.size().getInfo()>0:
-    preci1 = preci16.filterBounds(ee_fc).map(addDate).map(rasterExtraction).flatten()
-    preci2=generateVariables(preci1,preci_output);
-    if sm16.size().getInfo()>0:
-      sm1 = sm16.filterBounds(ee_fc).map(addDate).map(rasterExtraction).flatten()
-      sm2=generateVariables(sm1,sm_output);
-      merged_df=mergeDataframes(ndvi2,sm2);
-      merged_df2=mergeDataframes(merged_df,preci2);
-      selected_columns = ['X', 'Y', 'date', 'NDVI', 'sm_surface_mean', 'precipitation_sum']
-      result_df = merged_df2[selected_columns].loc[:, ~merged_df2[selected_columns].columns.duplicated()]
-      new_column_names = ['lon', 'lat', 'date', 'ndvi', 'sm', 'preci']
-      # Rename the columns
-      result_df.rename(columns=dict(zip(result_df.columns, new_column_names)), inplace=True)
-      result_df.to_csv(combined_output,mode='w')
+else:
+  funcs.truncate_file(combined_output)
+  funcs.exit_program()  
+if preci16.size().getInfo()>0:
+  preci1 = preci16.filterBounds(ee_fc).map(addDate).map(rasterExtraction).flatten()
+  preci2=generateVariables(preci1,preci_output);
+else:
+  funcs.truncate_file(combined_output)
+  funcs.exit_program()  
+if sm16.size().getInfo()>0:
+  sm1 = sm16.filterBounds(ee_fc).map(addDate).map(rasterExtraction).flatten()
+  sm2=generateVariables(sm1,sm_output);
+  merged_df=mergeDataframes(ndvi2,sm2);
+  merged_df2=mergeDataframes(merged_df,preci2);
+  selected_columns = ['X', 'Y', 'date', 'NDVI', 'sm_surface_mean', 'precipitation_sum']
+  result_df = merged_df2[selected_columns].loc[:, ~merged_df2[selected_columns].columns.duplicated()]
+  new_column_names = ['lon', 'lat', 'date', 'ndvi', 'sm', 'preci']
+  # Rename the columns
+  result_df.rename(columns=dict(zip(result_df.columns, new_column_names)), inplace=True)
+  result_df.to_csv(combined_output,mode='w')
+else:
+  funcs.truncate_file(combined_output)
+  funcs.exit_program()  
 
 
 
