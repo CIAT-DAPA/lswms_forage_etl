@@ -2,7 +2,7 @@
 
 [![Python: 3.12](https://img.shields.io/badge/python-3.12-blue.svg)](https://www.python.org/)
 
-This ETL is meant to process the data needed to support [the forage tool] (https://et.waterpointsmonitoring.net/forage).
+This ETL is meant to automate the process of Estimating Biomass. The maps can be accessed through [the forage tool ](https://et.waterpointsmonitoring.net/forage).
 
 ## Setup and Installation
 
@@ -46,7 +46,7 @@ The order of script execution is:
 
 ```
 
-You will ned a private_key.json file associated with service_account placed in the base directory.This file is also in the .gitignore so it will not be exposed publicly when you push and updates to your repo.
+You will need a private_key.json file associated with service_account placed in the base directory.This file is also in the .gitignore so it will not be exposed publicly when you push and updates to your repo.
 
 ```
 
