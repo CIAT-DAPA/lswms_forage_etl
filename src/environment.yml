@@ -1,0 +1,16 @@
+name: Biomass_Pipeline
+channels:
+  - conda-forge
+  - defaults
+dependencies:
+  - python=3.12
+  - earthengine-api
+  - openpyxl
+  - mgwr
+  - pandas
+  - rasterio
+  - matplotlib
+  - geopandas
+  - pip
+  - pip:
+      - gsconfig-py3

@@ -29,7 +29,6 @@ not be exposed publicly when you push and updates to your repo.
 
 ```json
 {
-  "base_directory": "{root folder for the etl, eg. /opt/Biomass/ or C:\\Biomass\\}",
   "service_account": "{service account to authenticate to Earth Engine}",
   "geoserve_url": "{geoserver REST URL}",
   "geoserver_user": "{geoserver publisher account username}",
