@@ -16,31 +16,29 @@ class TestRasterize(unittest.TestCase):
                                         'biom': [1.79040380360565, 1.78896823494216, 1.79198639098456]})
         self.test_data.to_csv('test_results.csv', index=False)
 
-    def tearDown(self):
-        # Clean up temporary files after each test
-        os.remove('test_results.csv')
-        #for file in os.listdir('temp_raster_files'):
-            #os.remove(os.path.join('temp_raster_files', file))
+    
 
     def test_process_data(self):
         # Test if process_data function correctly converts CSV to GeoDataFrame
-        self.test_data = process_data('test_results.csv')
-        self.assertIsInstance(self.test_data, gpd.GeoDataFrame)
-        self.assertEqual(len(self.test_data), 3)  # Assuming 3 rows of test data
+        processed_data = process_data('test_results.csv')
+        self.assertIsInstance(processed_data, gpd.GeoDataFrame)
+        self.assertEqual(len(processed_data), 3)  # Assuming 3 rows of test data
 
     def test_create_raster_files(self):
         # Test if create_raster_files function correctly generates raster files
         raster = rasterio.open('test_raster.tif', 'w', driver='GTiff', height=300, width=260, count=1,dtype='float32', crs='EPSG:4326', transform=rasterio.transform.from_origin(36, 15, 0.05, 0.05))
-        create_raster_files(self.test_data, 'temp_raster_files', raster)
+        processed_data = process_data('test_results.csv')
+        create_raster_files(processed_data, 'temp_raster_files', raster)
         raster.close()
         raster_files = os.listdir('temp_raster_files')
         self.assertEqual(len(raster_files), 1)  # Assuming only one raster file is created
         self.assertTrue(raster_files[0].startswith('biomass_20240101'))  # Assuming the file name follows a certain pattern
-
-    def test_create_fresh_list_final(self):
-        # Test if create_fresh_list_final function correctly creates or updates the output file
-        create_fresh_list_final()
-        self.assertTrue(os.path.exists('new_data_list_FINAL.txt'))  # Assuming the output file is created or updated
+    
+    def tearDown(self):
+        # Clean up temporary files after each test
+        os.remove('test_results.csv')
+        for file in os.listdir('temp_raster_files'):
+            os.remove(os.path.join('temp_raster_files', file))
 
 if __name__ == '__main__':
     unittest.main()

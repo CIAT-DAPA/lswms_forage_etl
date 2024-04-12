@@ -20,12 +20,6 @@ print ("")
 
 
 # Constants
-filepath = '../data.json'
-
-with open(filepath) as f:
-    data = json.load(f)
-
-
 outputs_path = '../outputs'
 data_path='../data'
 

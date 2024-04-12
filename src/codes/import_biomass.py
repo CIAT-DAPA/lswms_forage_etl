@@ -1,8 +1,8 @@
-import os
+import sys,os
 import sys
-from tools import GeoserverClient
 import json
-import os
+sys.path.append(os.path.join(os.path.dirname(os.path.abspath(__file__)), '..'))
+from codes.tools import GeoserverClient
 
 
 print ("")
@@ -18,8 +18,6 @@ filepath = '../data.json'
 
 with open(filepath) as f:
     data = json.load(f)
-
-all_path = data["base_directory"]
 
 geo_url = data["geoserve_url"]
 geo_user = data["geoserver_user"]
