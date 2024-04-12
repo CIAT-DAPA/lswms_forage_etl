@@ -49,5 +49,4 @@ You will need a private_key.json file associated with service_account placed in 
 
 ```
 
-There is an sh file to run the scripts run_scripts.sh I recommend setting up a root cron job to run it.
-Before you run it with cron you will need to chmod to 755 so it can be executed properly.
+There is master_script.py to run all the other scripts.
