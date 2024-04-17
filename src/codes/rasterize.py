@@ -20,14 +20,9 @@ print ("")
 
 
 # Constants
-filepath = '../data.json'
-
-with open(filepath) as f:
-    data = json.load(f)
-
-
-outputs_path = '../outputs'
-data_path='../data'
+project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
+outputs_path = os.path.join(project_root, 'outputs')
+data_path = os.path.join(project_root, 'data')
 
 
 layers_path = os.path.join(data_path, "layers")
