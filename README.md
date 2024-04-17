@@ -1,6 +1,6 @@
 # Biomass ETL
 
-[![Python: 3.12](https://img.shields.io/badge/python-3.12-blue.svg)](https://www.python.org/)
+![GitHub release (latest by date)](https://img.shields.io/github/v/release/CIAT-DAPA/lswms_forage_etl) ![](https://img.shields.io/github/v/tag/CIAT-DAPA/lswms_forage_etl)
 
 This ETL is meant to automate the process of Estimating Biomass. The maps can be accessed through [the forage tool ](https://et.waterpointsmonitoring.net/forage).
 
