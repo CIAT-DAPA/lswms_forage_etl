@@ -14,7 +14,8 @@ print ("")
 
 
 # Constants
-filepath = '../data.json'
+project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
+filepath = os.path.join(project_root, 'data.json')
 
 with open(filepath) as f:
     data = json.load(f)
@@ -27,8 +28,8 @@ geo_pwd = data["geoserver_pwd"]
 workspace_name = "waterpoints_et"
 forecast_type = "biomass"
 country_iso = workspace_name.split("_")[1]
-folder_data = '../data'
-outputs_path = '../outputs'
+folder_data = os.path.join(project_root, 'data')
+outputs_path = os.path.join(project_root, 'outputs')
 folder_layers = os.path.join(folder_data, "layers")
 folder_properties = os.path.join(folder_layers, forecast_type+"_properties")
 folder_tmp = os.path.join(folder_data, "tmp")

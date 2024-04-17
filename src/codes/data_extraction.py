@@ -20,16 +20,18 @@ print ("")
 
 
 # Constants
-filepath = '../data.json'
+project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
+filepath = os.path.join(project_root, 'data.json')
+
 
 with open(filepath) as f:
     data = json.load(f)
 
 
-private_key =  '../private_key.json'
-outputs_path = '../outputs'
-inputs_path = '../inputs'
-data_path='../data'
+private_key = os.path.join(project_root, 'private_key.json')
+outputs_path = os.path.join(project_root, 'outputs')
+inputs_path = os.path.join(project_root, 'inputs')
+data_path = os.path.join(project_root, 'data')
 layers_path = os.path.join(data_path, "layers")
 biomass_path = os.path.join(layers_path, "biomass_et")
 grid_points=os.path.join(inputs_path,  "grid_points.xlsx")
