@@ -12,13 +12,9 @@ sys.path.append(os.path.join(os.path.dirname(os.path.abspath(__file__)), '..'))
 from codes.funcs import *
 
 # Constants
-filepath = '../data.json'
+project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
 
-with open(filepath) as f:
-    data = json.load(f)
-
-
-outputs_path = '../outputs'
+outputs_path = os.path.join(project_root, 'outputs')
 
 
 combined_output=os.path.join(outputs_path,  "combined.csv")

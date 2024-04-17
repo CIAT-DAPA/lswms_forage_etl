@@ -17,6 +17,6 @@ def master_script(selected_files):
 
 if __name__ == "__main__":
     # specific files to execute
-    selected_files_to_execute = ["data_extraction.py", "rasterize.py","import_biomass.py",]
+    selected_files_to_execute = ["data_extraction.py","gwr_model.py", "rasterize.py","import_biomass.py",]
 
     master_script(selected_files_to_execute)
