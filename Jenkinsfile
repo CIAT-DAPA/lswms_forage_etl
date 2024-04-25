@@ -30,6 +30,7 @@ pipeline {
                         echo "Downloading latest release..."
                         sshCommand remote: remote, command: """
                             cd /opt/etlwms
+                            rm -rf src/*
                             rm -rf src
                             curl -LOk https://github.com/CIAT-DAPA/lswms_forage_etl/releases/latest/download/releaseForageEtl.zip
                             unzip -o releaseForageEtl.zip
