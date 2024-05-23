@@ -3,6 +3,8 @@ import sys
 import json
 sys.path.append(os.path.join(os.path.dirname(os.path.abspath(__file__)), '..'))
 from codes.tools import GeoserverClient
+from codes.funcs import *
+from codes.send_notification import *
 
 
 print ("")
@@ -34,13 +36,13 @@ folder_layers = os.path.join(folder_data, "layers")
 folder_properties = os.path.join(folder_layers, forecast_type+"_properties")
 folder_tmp = os.path.join(folder_data, "tmp")
 fname = os.path.join(outputs_path, "new_data_list_FINAL.txt")
-
 with open(fname) as f:
     file_content = f.readlines()
 
 rasters_files = [x.strip() for x in file_content]
 
-
+if len(rasters_files)==0:
+    exit_program()
 
 stores_biomass = [forecast_type]
 
@@ -75,3 +77,9 @@ for current_store in stores_biomass:
 
 
 print("Process completed")
+subject = "Biomass Updated"
+dynamic_header = "Notice: Biomass Data Updated Successfully:"
+dynamic_info = "I hope this email finds you well. We are reaching out to inform you Biomass data has been updated successfully. Below, you will find specific details about the raster files uploaded."
+dynamic_content = "<p>Raster Files:</p>"
+dynamic_content += f"<li><span style='color: green;'>{rasters_files}</span></li>"
+send_email_html(email_list, dynamic_header,dynamic_info,dynamic_content,subject) 

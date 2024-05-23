@@ -11,6 +11,13 @@ import sys, os
 sys.path.append(os.path.join(os.path.dirname(os.path.abspath(__file__)), '..'))
 from codes.funcs import *
 
+print ("")
+print ("")
+print ("         Running Geographically weighted regression model")
+print ("")
+print ("")
+print ("")
+
 # Constants
 project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
 
