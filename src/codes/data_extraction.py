@@ -8,6 +8,7 @@ import datetime
 from datetime import date,timedelta
 sys.path.append(os.path.join(os.path.dirname(os.path.abspath(__file__)), '..'))
 from codes.funcs import *
+from codes.send_notification import *
 
 print ("")
 print ("")
@@ -41,12 +42,19 @@ preci_output=os.path.join(outputs_path,  "preci.csv")
 combined_output=os.path.join(outputs_path,  "combined.csv")
 
 service_account = data["service_account"]
+email_list= data["email_list"]
 try:
   credentials = ee.ServiceAccountCredentials(service_account, private_key)
   ee.Initialize(credentials)
 except EEException as e:
         print(str(e))
         truncate_file(combined_output)
+        subject = "Biomass not updated"
+        dynamic_header = "Notice: Biomass Data Failed to Update:"
+        dynamic_info = "I hope this email finds you well. We are reaching out to inform you about a failure to update the biomass data. Below, you will find specific details about the error."
+        dynamic_content = "<p>Error Message:</p>"
+        dynamic_content += f"<li><span style='color: red;'>Could not authenticate with the Google Earth Engine</span></li>"
+        send_email_html(email_list, dynamic_header,dynamic_info,dynamic_content,subject)
         exit_program() 
 
 layers = os.listdir(biomass_path)
@@ -72,6 +80,12 @@ def addDate(image):
   except EEException as e:
         print(str(e))
         truncate_file(combined_output)
+        subject = "Biomass not updated"
+        dynamic_header = "Notice: Biomass Data Failed to Update:"
+        dynamic_info = "I hope this email finds you well. We are reaching out to inform you about a failure to update the biomass data. Below, you will find specific details about the error."
+        dynamic_content = "<p>Error Message:</p>"
+        dynamic_content += f"<li><span style='color: red;'>Google Earth Engine Error</span></li>"
+        send_email_html(email_list, dynamic_header,dynamic_info,dynamic_content,subject)       
         exit_program()   
 
 def getImage(product,start_date,end_date,variable):
@@ -80,6 +94,12 @@ def getImage(product,start_date,end_date,variable):
   except EEException as e:
         print(str(e))
         truncate_file(combined_output)
+        subject = "Biomass not updated"
+        dynamic_header = "Notice: Biomass Data Failed to Update:"
+        dynamic_info = "I hope this email finds you well. We are reaching out to inform you about a failure to update the biomass data. Below, you will find specific details about the error."
+        dynamic_content = "<p>Error Message:</p>"
+        dynamic_content += f"<li><span style='color: red;'>Google Earth Engine Error</span></li>"
+        send_email_html(email_list, dynamic_header,dynamic_info,dynamic_content,subject)           
         exit_program()   
 
 ndvi=getImage("MODIS/061/MOD13A2",start_date_,end_date_,"NDVI");
@@ -112,6 +132,13 @@ def calculatebiWeeklypreci(imageCollection):
   except EEException as e:
         print(str(e))
         truncate_file(combined_output)
+        subject = "Biomass not updated"
+        dynamic_header = "Notice: Biomass Data Failed to Update:"
+        dynamic_info = "I hope this email finds you well. We are reaching out to inform you about a failure to update the biomass data. Below, you will find specific details about the error."
+        dynamic_content = "<p>Error Message:</p>"
+        dynamic_content += f"<li><span style='color: red;'>Latest CHIRPS Daily products cannot be found in  Google Earth Engine</span></li>"
+        send_email_html(email_list, dynamic_header,dynamic_info,dynamic_content,subject)  
+        
         exit_program()   
 
 
@@ -140,6 +167,12 @@ def calculatebiWeeklysm(imageCollection):
   except EEException as e:
         print(str(e))
         truncate_file(combined_output)
+        subject = "Biomass not updated"
+        dynamic_header = "Notice: Biomass Data Failed to Update:"
+        dynamic_info = "I hope this email finds you well. We are reaching out to inform you about a failure to update the biomass data. Below, you will find specific details about the error."
+        dynamic_content = "<p>Error Message:</p>"
+        dynamic_content += f"<li><span style='color: red;'>Latest Soil Moisture products cannot be found in  Google Earth Engine</span></li>"
+        send_email_html(email_list, dynamic_header,dynamic_info,dynamic_content,subject)   
         exit_program()                                           
 
 
@@ -186,10 +219,22 @@ try:
     ndvi2=generateVariables(ndvi1,ndvi_output);
   else:
     truncate_file(combined_output)
+    subject = "Biomass not updated"
+    dynamic_header = "Notice: Biomass Data Failed to Update:"
+    dynamic_info = "I hope this email finds you well. We are reaching out to inform you about a failure to update the biomass data. Below, you will find specific details about the error."
+    dynamic_content = "<p>Error Message:</p>"
+    dynamic_content += f"<li><span style='color: red;'>Latest Terra Vegetation Indices 16-Day Global 1km products cannot be found in  Google Earth Engine</span></li>"
+    send_email_html(email_list, dynamic_header,dynamic_info,dynamic_content,subject)      
     exit_program()
 except EEException as e:
         print(str(e))
         truncate_file(combined_output)
+        subject = "Biomass not updated"
+        dynamic_header = "Notice: Biomass Data Failed to Update:"
+        dynamic_info = "I hope this email finds you well. We are reaching out to inform you about a failure to update the biomass data. Below, you will find specific details about the error."
+        dynamic_content = "<p>Error Message:</p>"
+        dynamic_content += f"<li><span style='color: red;'>Latest Terra Vegetation Indices 16-Day Global 1km products cannot be found in  Google Earth Engine</span></li>"
+        send_email_html(email_list, dynamic_header,dynamic_info,dynamic_content,subject)  
         exit_program()    
 try:
   if preci16.size().getInfo()>0:
@@ -197,10 +242,22 @@ try:
     preci2=generateVariables(preci1,preci_output);
   else:
     truncate_file(combined_output)
+    subject = "Biomass not updated"
+    dynamic_header = "Notice: Biomass Data Failed to Update:"
+    dynamic_info = "I hope this email finds you well. We are reaching out to inform you about a failure to update the biomass data. Below, you will find specific details about the error."
+    dynamic_content = "<p>Error Message:</p>"
+    dynamic_content += f"<li><span style='color: red;'>Latest CHIRPS Daily products cannot be found in  Google Earth Engine</span></li>"
+    send_email_html(email_list, dynamic_header,dynamic_info,dynamic_content,subject)     
     exit_program()
 except EEException as e:
         print(str(e))
         truncate_file(combined_output)
+        subject = "Biomass not updated"
+        dynamic_header = "Notice: Biomass Data Failed to Update:"
+        dynamic_info = "I hope this email finds you well. We are reaching out to inform you about a failure to update the biomass data. Below, you will find specific details about the error."
+        dynamic_content = "<p>Error Message:</p>"
+        dynamic_content += f"<li><span style='color: red;'>Latest CHIRPS Daily products cannot be found in  Google Earth Engine</span></li>"
+        send_email_html(email_list, dynamic_header,dynamic_info,dynamic_content,subject)  
         exit_program()
 try:
   if sm16.size().getInfo()>0:
@@ -216,10 +273,23 @@ try:
     result_df.to_csv(combined_output,mode='w')
   else:
     truncate_file(combined_output)
+    subject = "Biomass not updated"
+    dynamic_header = "Notice: Biomass Data Failed to Update:"
+    dynamic_info = "I hope this email finds you well. We are reaching out to inform you about a failure to update the biomass data. Below, you will find specific details about the error."
+    dynamic_content = "<p>Error Message:</p>"
+    dynamic_content += f"<li><span style='color: red;'>Latest Soil Moisture products cannot be found in  Google Earth Engine</span></li>"
+    
+    send_email_html(email_list, dynamic_header,dynamic_info,dynamic_content,subject)     
     exit_program()
 except EEException as e:
         print(str(e))
         truncate_file(combined_output)
+        subject = "Biomass not updated"
+        dynamic_header = "Notice: Biomass Data Failed to Update:"
+        dynamic_info = "I hope this email finds you well. We are reaching out to inform you about a failure to update the biomass data. Below, you will find specific details about the error."
+        dynamic_content = "<p>Error Message:</p>"
+        dynamic_content += f"<li><span style='color: red;'>Latest Soil Moisture products cannot be found in  Google Earth Engine</span></li>"
+        send_email_html(email_list, dynamic_header,dynamic_info,dynamic_content,subject)  
         exit_program()      
 
 
