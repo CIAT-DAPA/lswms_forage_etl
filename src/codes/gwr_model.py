@@ -35,7 +35,13 @@ if check_size(combined_output):
 
 def process_data(output_path):
     data = pd.read_csv(output_path)
-    data['ndvi'] = data['ndvi'] * 0.0001
+    # Ensure correct data types
+    data['date'] = data['date'].astype(str)
+    data['ndvi'] = data['ndvi'].astype(float) * 0.0001
+    data['sm'] = data['sm'].astype(float)
+    data['preci'] = data['preci'].astype(float)
+    data['lon'] = data['lon'].astype(float)
+    data['lat'] = data['lat'].astype(float)
     rows=data.shape[0]
     data.replace(np.nan, 0, inplace=True)
     geodf = gp.GeoDataFrame(data, geometry=gp.points_from_xy(data.lon, data.lat), crs="EPSG:4326")
