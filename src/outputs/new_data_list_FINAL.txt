@@ -1,2 +1,1 @@
-biomass_20240101.tif
-biomass_20240117.tif
+biomass_20240727.tif
