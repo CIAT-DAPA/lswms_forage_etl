@@ -37,7 +37,7 @@ def process_data(output_path):
     data = pd.read_csv(output_path)
     # Ensure correct data types
     data['date'] = data['date'].astype(str)
-    data['ndvi'] = data['ndvi'].astype(float) * 0.0001
+    data['ndvi'] = data['ndvi'].astype(float)
     data['sm'] = data['sm'].astype(float)
     data['preci'] = data['preci'].astype(float)
     data['lon'] = data['lon'].astype(float)
