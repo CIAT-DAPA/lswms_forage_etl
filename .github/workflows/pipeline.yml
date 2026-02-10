@@ -74,7 +74,7 @@ jobs:
         run: zip releaseForageEtl.zip ./src/* -r
       # Upload Artifacts
       - name: Upload Api artifact for deployment job
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: ForageEtl
           path: releaseForageEtl.zip
