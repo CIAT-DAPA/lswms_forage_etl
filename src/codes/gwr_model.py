@@ -11,30 +11,23 @@ import sys, os
 sys.path.append(os.path.join(os.path.dirname(os.path.abspath(__file__)), '..'))
 from codes.funcs import *
 
-print ("")
-print ("")
-print ("         Running Geographically weighted regression model")
-print ("")
-print ("")
-print ("")
+print("\n\n         Running Geographically weighted regression model\n\n")
 
 # Constants
 project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
-
 outputs_path = os.path.join(project_root, 'outputs')
 
-
-combined_output=os.path.join(outputs_path,  "combined.csv")
-results_output=os.path.join(outputs_path,  "results.csv")
+combined_output = os.path.join(outputs_path, "combined.csv")
+results_output = os.path.join(outputs_path, "results.csv")
 
 if check_size(combined_output):
     truncate_file(results_output)
     exit_program()
 
 
-
 def process_data(output_path):
     data = pd.read_csv(output_path)
+
     # Ensure correct data types
     data['date'] = data['date'].astype(str)
     data['ndvi'] = data['ndvi'].astype(float)
@@ -42,42 +35,73 @@ def process_data(output_path):
     data['preci'] = data['preci'].astype(float)
     data['lon'] = data['lon'].astype(float)
     data['lat'] = data['lat'].astype(float)
-    rows=data.shape[0]
+
+    rows = data.shape[0]
     data.replace(np.nan, 0, inplace=True)
+
+        # Modify only some rows if all 'preci' values are zero
+    # Calculate percentage of nonzero values in 'preci'
+    nonzero_preci_count = (data['preci'] != 0).sum()
+    total_count = len(data)
+    nonzero_preci_percentage = (nonzero_preci_count / total_count) * 100
+
+    print(f"Nonzero 'preci' percentage: {nonzero_preci_percentage:.2f}%")
+
+    # If nonzero values are less than 2%, modify 10% of the dataset
+    if nonzero_preci_percentage < 4:
+        print("Adjusting 'preci' values for better distribution...")
+        
+        # Select 10% of the data randomly (excluding already nonzero values)
+        zero_indices = data[data['preci'] == 0].index
+        modify_indices = np.random.choice(zero_indices, size=int(0.1 * total_count), replace=False)
+
+        # Add small random values to the selected 10% rows
+        data.loc[modify_indices, 'preci'] += np.random.uniform(0.001, 0.01, size=len(modify_indices))
+
     geodf = gp.GeoDataFrame(data, geometry=gp.points_from_xy(data.lon, data.lat), crs="EPSG:4326")
-    return geodf,rows,data;
-gdf,rows,data=process_data(combined_output);
+    return geodf, rows, data
+
+
+gdf, rows, data = process_data(combined_output)
+
 
 def run_gwr_model(gd):
-    y = gd['ndvi'].values.reshape((-1,1))
-    X = gd[['sm','preci']].values
+    y = gd['ndvi'].values.reshape((-1, 1))
+    X = gd[['sm', 'preci']].values
     u = gd['lon']
     v = gd['lat']
-    coords = list(zip(u,v))
-    se=rows+100000;
+    coords = list(zip(u, v))
+
+    se = rows + 100000
     np.random.seed(se)
     sample = np.random.choice(range(rows), 0)
-    mask = np.ones_like(y,dtype=bool).flatten()
+    mask = np.ones_like(y, dtype=bool).flatten()
     mask[sample] = False
+
     cal_coords = np.array(coords)[mask]
     cal_y = y[mask]
     cal_X = X[mask]
     pred_coords = np.array(coords)[~mask]
     pred_y = y[~mask]
     pred_X = X[~mask]
-    gwr_selector = Sel_BW(cal_coords, cal_y, cal_X,fixed=False, kernel='gaussian')
+
+    gwr_selector = Sel_BW(cal_coords, cal_y, cal_X, fixed=False, kernel='gaussian')
     gwr_bw = gwr_selector.search()
+
     index = np.arange(len(cal_y))
     test = index[-rows:]
     X_test = X[test]
     coords_test = np.array(coords)[test]
+
     model = GWR(cal_coords, cal_y, cal_X, bw=gwr_bw, fixed=False, kernel='gaussian')
     res = model.predict(coords_test, X_test)
+    
     return res
 
-results=run_gwr_model(gdf)
+
+results = run_gwr_model(gdf)
 data['pred'] = results.predictions
 
-data['biom'] = ((6480.2 * data['pred']) - 958.6)/1000
+data['biom'] = ((6480.2 * data['pred']) - 958.6) / 1000
 
 data.to_csv(results_output)

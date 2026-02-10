@@ -76,10 +76,10 @@ for current_store in stores_biomass:
                 store, layer, folder_properties, folder_tmp)
 
 
-print("Process completed")
+'''print("Process completed")
 subject = "Biomass Updated"
 dynamic_header = "Notice: Biomass Data Updated Successfully:"
 dynamic_info = "I hope this email finds you well. We are reaching out to inform you Biomass data has been updated successfully. Below, you will find specific details about the raster files uploaded."
 dynamic_content = "<p>Raster Files:</p>"
 dynamic_content += f"<li><span style='color: green;'>{rasters_files}</span></li>"
-send_email_html(email_list, dynamic_header,dynamic_info,dynamic_content,subject) 
+send_email_html(email_list, dynamic_header,dynamic_info,dynamic_content,subject)'''

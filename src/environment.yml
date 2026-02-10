@@ -1,16 +1,39 @@
 name: Biomass_Pipeline
 channels:
   - conda-forge
+  - pytorch
   - defaults
 dependencies:
   - python=3.12
-  - earthengine-api
-  - openpyxl
-  - mgwr
+  - numpy
   - pandas
+  - openpyxl
+  - requests
+  - earthengine-api
+
+  # Geo stack
   - rasterio
-  - matplotlib
   - geopandas
+  - libpysal
+  - mgwr
+  - matplotlib
+  - proj
+  - proj-data
+  - gdal
+  - xarray
+  - netcdf4
+  - h5netcdf
+  - h5py
+  - cftime
+  - libnetcdf
+  - hdf5
+  - pytorch
+  - torchvision
+  - torchaudio
+  - pyro-ppl
+
   - pip
   - pip:
       - gsconfig-py3
+      - rasterstats
+      - psycopg2-binary
