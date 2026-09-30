@@ -35,20 +35,24 @@ def main():
     
     shape_files = [
         os.path.join(shapefile_folder, "woredas.shp"),
+        os.path.join(shapefile_folder, "South_Omo.shp"),
     ]
 
     shape_file_columns = [
-        'ADM3_PCODE'
+        'ADM3_PCODE',
+        'ADM2_PCODE',
     ]
 
     create_new_time_series_list = [
-        True
+        True,
+        True,
     ]
 
    
 
     convert_BIOMASS_from_scratch_list = [
-        True
+        True,
+        True,
     ]
     
 

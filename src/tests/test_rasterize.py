@@ -32,7 +32,7 @@ class TestRasterize(unittest.TestCase):
 
     def test_create_raster_files(self):
         # Test if create_raster_files function correctly generates raster files
-        raster = rasterio.open(self.test_raster, 'w', driver='GTiff', height=300, width=260, count=1,dtype='float32', crs='EPSG:4326', transform=rasterio.transform.from_origin(36, 15, 0.05, 0.05))
+        raster = rasterio.open(self.test_raster, 'w', driver='GTiff', height=300, width=280, count=1,dtype='float32', crs='EPSG:4326', transform=rasterio.transform.from_origin(35, 15, 0.05, 0.05))
         processed_data = process_data(self.test_results)
         create_raster_files(processed_data, self.temp_raster_files, raster)
         raster.close()
