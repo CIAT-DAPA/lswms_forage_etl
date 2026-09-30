@@ -10,7 +10,7 @@ import rasterio
 from rasterio.mask import mask as rio_mask
 from rasterio.coords import BoundingBox
 from rasterio.windows import Window
-from shapely.geometry import box
+from shapely.geometry import box, mapping
 import requests
 import geopandas as gpd
 from rasterstats import zonal_stats
@@ -118,7 +118,14 @@ class aggregate_time_series:
 
     @staticmethod
     def _features_from_row(row: gpd.GeoDataFrame):
-        return [json.loads(row.to_json())['features'][0]['geometry']]
+        """Return only the geometry mapping.
+
+        Avoid serializing the full GeoDataFrame row because shapefiles may
+        contain datetime fields that GeoPandas reads as pandas Timestamp
+        objects, which are not JSON serializable.
+        """
+        geom = row.geometry.iloc[0]
+        return [mapping(geom)]
 
     def open_files(self):
         for self.date_counter, biomass_file in enumerate(self.biomass_files):
@@ -369,14 +376,30 @@ class aggregate_time_series:
         all_data_to_send = []
         for shape_counter, dataset in enumerate(self.datasets):
             for date_index in range(len(self.biomass_files)):
+                raw_date = self.final_array[shape_counter, date_index, 0]
                 val = self.final_array[shape_counter, date_index, 1]
+
+                # A failed zonal-statistics iteration can leave the date as
+                # NaN/0. Skip such rows instead of crashing the whole run.
+                if not np.isfinite(raw_date) or raw_date <= 0:
+                    self._log(
+                        f"[WARN] Skipping API row for {dataset}: invalid date {raw_date}"
+                    )
+                    continue
+
+                date_str = str(int(raw_date))
+                try:
+                    api_date = datetime.strptime(date_str, "%Y%m%d").strftime("%Y-%m-%d")
+                except ValueError:
+                    self._log(
+                        f"[WARN] Skipping API row for {dataset}: invalid date {date_str}"
+                    )
+                    continue
+
                 data_to_send = {
                     "extId": dataset,
-                    "mean": None if (isinstance(val, float) and np.isnan(val)) else round(float(val), 6),
-                    "date": datetime.strptime(
-                        str(int(self.final_array[shape_counter, date_index, 0])),
-                        "%Y%m%d"
-                    ).strftime("%Y-%m-%d"),
+                    "mean": None if not np.isfinite(val) else round(float(val), 6),
+                    "date": api_date,
                 }
                 all_data_to_send.append(data_to_send)
 
