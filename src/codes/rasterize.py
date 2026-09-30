@@ -60,7 +60,7 @@ def process_data(result_path):
 
 geo_data =process_data(results_output);
 
-raster = rasterio.open(raster_output, 'w', driver='GTiff', height=300, width=260, count=1, dtype='float32', crs='EPSG:4326', transform=from_origin(36, 15, 0.05, 0.05))
+raster = rasterio.open(raster_output, 'w', driver='GTiff', height=300, width=280, count=1, dtype='float32', crs='EPSG:4326', transform=from_origin(35, 15, 0.05, 0.05))
 
 output_dir = biomass_path
 
